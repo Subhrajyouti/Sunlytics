@@ -28,7 +28,7 @@ waaree_ahnay_550['K'] = 0.05  # Typical for modern AR-coated glass
 
 inverter_havels =  {
     'paco': 3000,
-    'pdc0': 3300 # Match this to your module's 'pdc0'
+    'pdc0': 3000 # Match this to your module's 'pdc0'
 }
 
 
@@ -36,7 +36,7 @@ inverter_havels =  {
 system = PVSystem(surface_tilt=45,surface_azimuth=180,
                   module_parameters=waaree_ahnay_550,
                   inverter_parameters=inverter_havels,
-                  modules_per_string=6,
+                  modules_per_string=2,
                   temperature_model_parameters=temperature_parameters)
 modelchain = ModelChain(system, location, 
                         dc_model='pvwatts', 

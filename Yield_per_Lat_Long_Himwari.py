@@ -14,7 +14,7 @@ EMAIL   = "mahantasubhra243@gmail.com"
 BASE_CSV = "https://developer.nrel.gov/api/nsrdb/v2/solar/himawari-tmy-download.csv"
 
 def download_himawari_tmy(lat: float, lon: float,
-                         tmy_version: str = "tmy-2020",
+                         tmy_version: str = "tmy-2017",
                          interval: int = 60,
                          attributes: str = "air_temperature,ghi,dni,dhi,wind_speed"
                          ) -> pd.DataFrame:
@@ -96,14 +96,14 @@ def main():
 
     inverter_params = {
         "paco": 3000,
-        "pdc0": 3300
+        "pdc0": 3000
     }
 
-    system = PVSystem(surface_tilt=45,
+    system = PVSystem(surface_tilt=lat,
                       surface_azimuth=180,
                       module_parameters=module_params,
                       inverter_parameters=inverter_params,
-                      modules_per_string=6,
+                      modules_per_string=2,
                       temperature_model_parameters=temp_params)
 
     mc = ModelChain(system,
@@ -117,10 +117,7 @@ def main():
 
     # 4) Plot hourly AC power
     ac = mc.results.ac
-    ac.plot(figsize=(14, 6))
-    plt.ylabel("AC Power (W)")
-    plt.title("Hourly AC Power Yield")
-    plt.show()
+   
 
     # 5) Print total annual yield
     total_kwh = ac.sum() / 1000.0
