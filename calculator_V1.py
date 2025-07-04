@@ -190,7 +190,7 @@ def main():
     cap_cost = float(row.get(bracket,0))
     cost_per_kwp = cap_cost / min(kWp_req,int(bracket[0]))
     total_cost   = cost_per_kwp * kWp_req
- #################################################################################
+
     # Subsidies
     state_rate, state_sub = parse_state_subsidy(row, kWp_req)
     central_sub = get_central_subsidy(kWp_req)
@@ -209,7 +209,7 @@ def main():
         yt = total_yield * (1-DEGRADATION_RATE)**(t-1)
         ct = annual_need  * (1+CONSUMPTION_GROWTH)**(t-1)
         tt = base_tariff * (1+INFLATION_RATE)**(t-1)
-        save_self = min(yt,ct)*tt
+        save_self = ct*tt
         export   = max(yt-ct,0)*EXPORT_TARIFF
         omc      = OM_COST_RATE*kWp_req*(1+INFLATION_RATE)**(t-1)
         irc      = INVERTER_COST if (t%INV_REPL_INTERVAL==0) else 0
