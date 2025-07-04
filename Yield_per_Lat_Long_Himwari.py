@@ -79,6 +79,7 @@ def main():
                         altitude=location_elev if (location_elev := tmy.index[0].tzinfo) else 50)
 
     temp_params = TEMPERATURE_MODEL_PARAMETERS["sapm"]["open_rack_glass_glass"]
+    
 
     module_params = {
         "pdc0": 550,

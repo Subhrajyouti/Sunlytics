@@ -101,13 +101,7 @@ def calc_irr(cashflows):
     real_x = [r.real for r in roots if abs(r.imag) < 1e-6 and r.real > 0]
     return real_x[0] - 1 if real_x else None
 
-def run_calculator(state: str, mthly: float, latlong: str):
-    # 1) Parse "lat,long" string
-    try:
-        lat_str, lon_str = latlong.split(",")
-        lat, lon = float(lat_str.strip()), float(lon_str.strip())
-    except Exception:
-        return {"error": "Invalid latlong format. Use 'lat,lon' (e.g. '26.44,91.41')."}
+def run_calculator(state: str, mthly: float, lat: float, lon: float):
     ypk = estimate_yield_per_kwp(lat, lon)
     annual_need = mthly * 12.0
     kWp_req = math.ceil(annual_need / ypk)
