@@ -1,58 +1,38 @@
 # main.py
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from calculator_api import run_calculator
 
-app = FastAPI(
-    title="Residential Solar Calculator API",
-    version="1.0"
-)
+app = FastAPI(title="Residential Solar Calculator API", version="1.0")
 
-# ─── CORS: only allow your website to talk to this API ────────────────────────
+# 1) CORS: only your site can call this API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://subhrajyoti.online",   # your production domain
-        "http://localhost",              # for local dev
-        "http://localhost:3000",         # if you run a front-end dev server
+        "https://subhrajyoti.online",   # your production site
+        "http://localhost:3000",         # for local dev
     ],
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ─── request / response model ────────────────────────────────────────────────
+# 2) Request/response model
 class InputData(BaseModel):
     state: str
     monthly_units: float
-    latlong: str    # e.g. "26.4155,94.14567452"
+    latlong: str    # e.g. "26.44,91.41"
 
 @app.post("/api/calculate")
 def calculate(data: InputData):
-    """
-    Expects JSON:
-      {
-        "state": "Assam",
-        "monthly_units": 300.0,
-        "latlong": "26.44,91.41"
-      }
-    """
-    result = run_calculator(
+    return run_calculator(
         state=data.state,
         mthly=data.monthly_units,
         latlong=data.latlong
     )
-    return result
-
-# ─── Run with "$PORT" on Render or default to 8000 ────────────────────────────
+    
+# 3) Run on $PORT or default 8000
 if __name__ == "__main__":
     import os, uvicorn
-
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(
-        "main:app", 
-        host="0.0.0.0", 
-        port=port, 
-        reload=True
-    )
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
